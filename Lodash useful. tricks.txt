@@ -1,0 +1,104 @@
+// 10 Lodash functions everyone should know
+
+// Lodash Docs and medium article"
+https://lodash.com/docs
+https://medium.com/voobans-tech-stories/10-lodash-functions-everyone-should-know-334b372aec5d
+
+_.times
+receives as arguments the number of iterations and a function to execute n times and returns an array of the results. Very useful when creating dynamic test data.
+
+function getRandomInteger() {
+  return Math.round(Math.random() * 100);
+}
+var result = _.times(5, getRandomNumber);
+// result => [64, 70, 29, 10, 23]google sheets
+
+_.debounce
+will invoke a function after a certain amount of time since the last time it was invoked.
+
+function validateEmail() {
+  // Validate email here and show error message if not valid
+}
+var emailInput = document.getElementById("email-field");
+emailInput.addEventListener("keyup", _.debounce(validateEmail, 500));
+
+_.find
+Instead iterating through an array with a loop, use _.find. You can also find an object using multiple properties with a single line of code.
+
+const users = [
+  { firstName: "John", lastName: "Doe", age: 28, gender: "male" },
+  { firstName: "Jane", lastName: "Doe", age: 5, gender: "female" },
+  { firstName: "Jim", lastName: "Carrey", age: 54, gender: "male" },
+  { firstName: "Kate", lastName: "Winslet", age: 40, gender: "female" }
+];
+
+const user = _.find(users, { lastName: "Doe", gender: "male" });
+// user -> { firstName: "John", lastName: "Doe", age: 28, gender: "male" }
+
+const underAgeUser = _.find(users, (user) => user.age < 18);
+// underAgeUser -> { firstName: "Jane", lastName: "Doe", age: 5, gender: "female" }
+
+_.get  ._set
+ _.get returns a property value from an object and _.set sets a property with a value. Nothing special except that you can access a property with its path. When using _.set, if the path doesn’t exist, it will be created.
+
+ var bar = { foo: { key: "foo" } };
+_.set(bar, "foo.items[0]", "An item");
+// bar => { foo: { key: "foo", items: ["An item"] } }
+var name = _.get(bar, "name", "John Doe");
+// name => John Doe
+
+_.deburr
+removes all “combining diacritical marks”, so “é” becomes “e”. It’s a good habit to deburr text for a search function when there is internationalization and localization.
+
+_.deburr("déjà vu");   // -> deja vu
+_.deburr("Juan José");   // -> Juan Jose
+
+_.keyBy
+It helps when trying to get an object with a specific property. Let’s say we have 100 blog posts and we want to get the post with Id “34abc”. Anytime a server returns an object collection as an array, this function can help you organize it. The second argument can also be a function.
+
+const posts = [
+  { id: "1abc", title: "First blog post", content: "..." },
+  { id: "2abc", title: "Second blog post", content: "..." },
+  // more blog posts
+  { id: "34abc", title: "The blog post we want", content: "..." }
+  // even more blog posts
+];
+posts = _.keyBy(posts, "id");
+const post = posts["34abc"]
+// post -> { id: "34abc", title: "The blog post we want", content: "..." }
+
+_.cloneDeep
+It clones an object with a new address in memory
+
+const original = { foo: "bar" };
+const copy = original;
+copy.foo = "new value";
+// copy -> { foo: "new value" } Yeah!
+// original -> { foo: "new value" } Oops!
+
+const original2 = { foo: "bar" };
+const copy2 = _.cloneDeep(original);
+copy.foo = "new value";
+// copy -> { foo: "new value" } Yeah!
+// original -> { foo: "bar" } Yeah!
+
+
+_.reduce
+is a little bit like a filter function but you can choose the form of the returned object.
+
+const users = [
+  { name: "John", age: 30 },
+  { name: "Jane", age: 28 },
+  { name: "Bill", age: 65 },
+  { name: "Emily", age: 17 },
+  { name: "Jack", age: 30 }
+]
+const reducedUsers = _.reduce(users, function (result, user) {
+  if(user.age >= 18 && user.age <= 59) {
+      (result[user.age] || (result[user.age] = [])).push(user);
+  } return result;
+}, {});
+// reducedUsers -> {
+//     28: [{ name: "Jane", age: 28 }],
+//     30: [{ name: "John", age: 30 }, { name: "Jack", age: 30 }]
+//  }
